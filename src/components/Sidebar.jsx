@@ -12,7 +12,7 @@ function Sidebar() {
   const [Extended, setExtended] = useState(false);
 
   return (
-    <div className="bg-[#f4f0f9] h-screen inline-flex flex-col justify-between py-6 px-3.5">
+    <div className="bg-[#f4f0f9] h-screen inline-flex flex-col justify-between py-6 px-3.5 font-outfit">
       {/* Top */}
       <div>
         <Menu
@@ -20,7 +20,7 @@ function Sidebar() {
           size={20}
           className="cursor-pointer ml-2.5"
         />
-        <div className="inline-flex bg-[#e6e4f1] items-center gap-2.5 py-2.5 px-3.5 mt-12 rounded-4xl text-gray-700 cursor-pointer text-sm ">
+        <div className="inline-flex bg-[#e6e4f1] items-center gap-2.5 py-3 px-3.5 mt-12 rounded-4xl text-gray-700 cursor-pointer text-sm ">
           <Plus size={20} />
           {Extended ? <p>New Chat</p> : null}
         </div>
