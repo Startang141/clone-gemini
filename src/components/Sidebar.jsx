@@ -13,7 +13,7 @@ function Sidebar() {
 
   return (
     <div
-      className={`bg-[#f4f0f9] h-screen inline-flex flex-col justify-between py-6 px-3.5 transition-all duration-500 ease-out ${
+      className={`bg-[#f0f4f9] h-screen inline-flex flex-col justify-between py-6 px-3.5 transition-all duration-500 ease-out ${
         Extended ? `w-64` : `w-20`
       }`}
     >
