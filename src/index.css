@@ -5,3 +5,20 @@
 @theme {
   --font-outfit: "Outfit";
 }
+
+@keyframes gradientPulse {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.loading-gradient {
+  background: linear-gradient(to right, #9ed7ff, #ffffff, #9ed7ff);
+  background-size: 200% 100%;
+  animation: gradientPulse 2s infinite linear;
+  height: 10px;
+  border-radius: 4px;
+}
