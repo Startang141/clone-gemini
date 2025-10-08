@@ -37,16 +37,20 @@ function Main() {
   };
 
   const formatResponse = (response) => {
-    const formattedResponse = response
-      .replace(/1\.\s([^\n]+)/g, "<h2>$1</h2>")
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*([^\*]+)\*/g, "<em>$1</em>")
-      .replace(/\n/g, "<p>$&</p>");
+    let formattedResponse = response
+      .replace(
+        /(\d+)\.\s([^\n]+)/g,
+        (match, p1, p2) => `<p class="my-4"><strong>${p1}.</strong> ${p2}</p>`
+      )
+      .replace(/\*\*(.*?)\*\*/g, "<strong class='font-semibold'>$1</strong>")
+      .replace(/\*([^\*]+)\*/g, "<em class='italic'>$1</em>")
+      .replace(/\n/g, "<p class='my-4'>$&</p>");
+
     return formattedResponse;
   };
 
   return (
-    <div className="flex-1 min-h-screen pb-[15vh] relative">
+    <div className="flex-1 min-h-screen pb-[15vh] max-h-screen overflow-y-auto relative">
       {/* Navbar */}
       <div className="flex items-center justify-between text-xl text-[#585858] p-5">
         <p>Gemini</p>
@@ -90,7 +94,7 @@ function Main() {
               iconCard={
                 <MessageSquare
                   size={35}
-                  className="ml-auto p-1 bg-white rounded-3xl"
+                  className="ml-auto p-1.5 bg-white rounded-xl"
                 />
               }
             />
@@ -131,7 +135,7 @@ function Main() {
         )}
 
         {/* search bar */}
-        <div className="absolute max-w-4xl w-full py-5 bottom-0">
+        <div className="fixed max-w-4xl w-full bottom-0 ">
           <div className="flex items-center justify-between py-2.5 px-5 bg-[#f0f4f9] rounded-4xl">
             <input
               type="text"
@@ -156,7 +160,7 @@ function Main() {
             </div>
           </div>
           {/* footer info */}
-          <p className="text-sm py-4 font-light text-center">
+          <p className="text-sm py-4 font-light text-center bg-white">
             Gemini may display inaccurate info, including about people, so
             double-check its response. Your privacy and gemini apps
           </p>
