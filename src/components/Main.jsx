@@ -30,10 +30,19 @@ function Main() {
     setLoading(false);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && inputText.trim() !== "") {
       handleSubmit();
     }
+  };
+
+  const formatResponse = (response) => {
+    const formattedResponse = response
+      .replace(/1\.\s([^\n]+)/g, "<h2>$1</h2>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*([^\*]+)\*/g, "<em>$1</em>")
+      .replace(/\n/g, "<p>$&</p>");
+    return formattedResponse;
   };
 
   return (
@@ -111,7 +120,11 @@ function Main() {
                   <div className="loading-gradient" />
                 </div>
               ) : (
-                <p>{responseText}</p>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: formatResponse(responseText),
+                  }}
+                />
               )}
             </div>
           </div>
@@ -126,6 +139,7 @@ function Main() {
               id=""
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={handleKeyPress}
               placeholder="Enter a prompt here"
               className="flex-1 bg-transparent outline-0 border-0 p-2 text-xl"
             />
@@ -136,11 +150,7 @@ function Main() {
               <button className="cursor-pointer">
                 <Mic size={24} />
               </button>
-              <button
-                className="cursor-pointer"
-                onClick={handleSubmit}
-                onKeyDown={handleKeyDown}
-              >
+              <button className="cursor-pointer" onClick={handleSubmit}>
                 <SendHorizontal size={24} />
               </button>
             </div>
