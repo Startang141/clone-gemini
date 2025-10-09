@@ -6,6 +6,7 @@ import {
   Compass,
   ImagePlus,
   Lightbulb,
+  Menu,
   MessageSquare,
   Mic,
   SendHorizontal,
@@ -13,12 +14,14 @@ import {
 import CardMain from "./CardMain";
 import { getGeminiResponse } from "../config/apiConfig";
 
-function Main() {
+function Main({ toggleDarkMode, sidebarOpen }) {
   const [responseText, setResponseText] = useState("");
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [submittedPrompt, setSubmittedPrompt] = useState("");
   const [isSubmited, setIsSubmited] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSubmit = async () => {
     setIsSubmited(true);
@@ -49,18 +52,53 @@ function Main() {
     return formattedResponse;
   };
 
+  const handleDarkMode = () => {
+    setIsDarkMode((prev) => {
+      const newState = !prev;
+      toggleDarkMode(newState);
+      return newState;
+    });
+  };
+
+  const handleSidebarOpen = () => {
+    setIsSidebarOpen((prev) => {
+      const newState = !prev;
+      sidebarOpen(newState);
+      return newState;
+    });
+  };
+
   return (
-    <div className="flex-1 min-h-screen pb-[15vh] max-h-screen overflow-y-auto relative">
+    <div className="flex-1 min-h-screen pb-[15vh] max-h-screen overflow-y-auto relative bg-white dark:bg-[#1b1c1d]">
       {/* Navbar */}
-      <div className="flex items-center justify-between text-xl text-[#585858] p-5">
-        <p>Gemini</p>
-        <img src={User} alt="" className="rounded-full w-10" />
+      <div className="flex items-center justify-between text-xl text-[#585858] dark:text-slate-300 p-5">
+        <div className="flex items-center gap-4">
+          <Menu
+            onClick={() => handleSidebarOpen()}
+            size={20}
+            className="cursor-pointer ml-2.5 dark:text-[#a2a9b0] sm:hidden"
+          />
+          <p>Gemini</p>
+        </div>
+        <div className="flex items-center gap-8">
+          {/* Toggle Dark */}
+          <label class="inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              value={isDarkMode}
+              onClick={() => handleDarkMode()}
+              class="sr-only peer"
+            />
+            <div class="relative w-11 h-6 bg-[#f0f4f9] peer-fo;cus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-[#f0f4f9] peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600 transition-all ease-out"></div>
+          </label>
+          <img src={User} alt="" className="rounded-full w-10" />
+        </div>
       </div>
       {/* Main Content */}
       <div className="max-w-4xl m-auto">
         {/* Heading */}
         {!isSubmited ? (
-          <div className="text-6xl my-12 p-5 font-medium text-[#c4c7c5]">
+          <div className="text-6xl my-12 p-5 font-medium text-[#c4c7c5] dark:text-neutral-600">
             <p className="bg-linear-16 from-[#4b90ff]  to-[#ff5546] w-fit text-transparent bg-clip-text">
               Hello, Dev.
             </p>
@@ -76,7 +114,7 @@ function Main() {
               iconCard={
                 <Compass
                   size={35}
-                  className="ml-auto p-1 bg-white rounded-3xl"
+                  className="ml-auto p-1 bg-white rounded-3xl dark:text-white dark:bg-black"
                 />
               }
             />
@@ -85,7 +123,7 @@ function Main() {
               iconCard={
                 <Lightbulb
                   size={35}
-                  className="ml-auto p-1 bg-white rounded-3xl"
+                  className="ml-auto p-1 bg-white rounded-3xl dark:text-white dark:bg-black"
                 />
               }
             />
@@ -94,7 +132,7 @@ function Main() {
               iconCard={
                 <MessageSquare
                   size={35}
-                  className="ml-auto p-1.5 bg-white rounded-xl"
+                  className="ml-auto p-1.5 bg-white rounded-xl dark:text-white dark:bg-black"
                 />
               }
             />
@@ -103,7 +141,7 @@ function Main() {
               iconCard={
                 <CodeXml
                   size={35}
-                  className="ml-auto p-1 bg-white rounded-3xl"
+                  className="ml-auto p-1 bg-white rounded-3xl dark:text-white dark:bg-black"
                 />
               }
             />
@@ -112,19 +150,22 @@ function Main() {
           <div>
             <div className="flex items-center gap-5 my-10">
               <img src={User} alt="" className="rounded-full w-10" />
-              <p>{submittedPrompt}</p>
+              <p className="text-black dark:text-slate-300">
+                {submittedPrompt}
+              </p>
             </div>
             <div className="flex items-start gap-5">
               <img src={IconGemini} width={36} alt="" />
               {loading ? (
                 <div className="w-full flex flex-col gap-2.5">
                   {/* Animasi Loading dengan Gradient */}
-                  <div className="loading-gradient" />
-                  <div className="loading-gradient" />
-                  <div className="loading-gradient" />
+                  <div className="loading-gradient dark:loading-gradient-dark" />
+                  <div className="loading-gradient dark:loading-gradient-dark" />
+                  <div className="loading-gradient dark:loading-gradient-dark" />
                 </div>
               ) : (
                 <div
+                  className="text-black dark:text-slate-300"
                   dangerouslySetInnerHTML={{
                     __html: formatResponse(responseText),
                   }}
@@ -136,7 +177,7 @@ function Main() {
 
         {/* search bar */}
         <div className="fixed max-w-4xl w-full bottom-0 ">
-          <div className="flex items-center justify-between py-2.5 px-5 bg-[#f0f4f9] rounded-4xl">
+          <div className="flex items-center justify-between py-2.5 px-5 bg-[#f0f4f9] rounded-4xl dark:border-[1px] dark:border-[#5c5f5e] dark:bg-[#1b1c1d] dark:text-[#a2a9b0]">
             <input
               type="text"
               name=""
@@ -145,7 +186,7 @@ function Main() {
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="Enter a prompt here"
-              className="flex-1 bg-transparent outline-0 border-0 p-2 text-xl"
+              className="flex-1 bg-transparent outline-0 border-0 p-2 text-xl "
             />
             <div className="flex items-center gap-4">
               <button className="cursor-pointer">
@@ -160,7 +201,7 @@ function Main() {
             </div>
           </div>
           {/* footer info */}
-          <p className="text-sm py-4 font-light text-center bg-white">
+          <p className="text-sm py-4 font-light text-center bg-white dark:bg-[#1b1c1d] dark:text-[#a2a9b0]">
             Gemini may display inaccurate info, including about people, so
             double-check its response. Your privacy and gemini apps
           </p>

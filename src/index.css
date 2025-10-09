@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-outfit: "Outfit";
@@ -17,6 +18,14 @@
 
 .loading-gradient {
   background: linear-gradient(to right, #9ed7ff, #ffffff, #9ed7ff);
+  background-size: 200% 100%;
+  animation: gradientPulse 2s infinite linear;
+  height: 10px;
+  border-radius: 4px;
+}
+
+.loading-gradient-dark {
+  background: linear-gradient(to right, #9ed7ff, #131313, #9ed7ff);
   background-size: 200% 100%;
   animation: gradientPulse 2s infinite linear;
   height: 10px;
