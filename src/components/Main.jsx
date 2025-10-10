@@ -61,11 +61,7 @@ function Main({ toggleDarkMode, sidebarOpen }) {
   };
 
   const handleSidebarOpen = () => {
-    setIsSidebarOpen((prev) => {
-      const newState = !prev;
-      sidebarOpen(newState);
-      return newState;
-    });
+    sidebarOpen((prev) => !prev);
   };
 
   return (
@@ -76,7 +72,7 @@ function Main({ toggleDarkMode, sidebarOpen }) {
           <Menu
             onClick={() => handleSidebarOpen()}
             size={20}
-            className="cursor-pointer ml-2.5 dark:text-[#a2a9b0] sm:hidden"
+            className="cursor-pointer ml-2.5 dark:text-[#a2a9b0] md:hidden"
           />
           <p>Gemini</p>
         </div>

@@ -5,24 +5,39 @@ import {
   MessageSquare,
   Plus,
   Settings,
+  X,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function Sidebar({ isSidebarOpen }) {
+function Sidebar({ isSidebarOpen, closeSidebar }) {
   const [Extended, setExtended] = useState(false);
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      setExtended(true);
+    }
+  }, [isSidebarOpen]);
+
+  const handleCloseSidebar = () => {
+    closeSidebar(false);
+  };
 
   return (
     <div
-      className={`bg-[#f0f4f9] h-screen flex-col md:inline-flex justify-between py-6 px-3.5 transition-all duration-500 ease-out dark:bg-[#282a2c]  ${
+      className={`bg-[#f0f4f9] h-screen flex-col inline-flex absolute z-50 md:left-0 md:relative justify-between py-6 px-3.5 transition-all duration-500 ease-out dark:bg-[#282a2c]  ${
         Extended ? `w-64` : `w-20`
-      } ${isSidebarOpen ? `sm:block` : `sm:hidden`}`}
+      } ${isSidebarOpen ? `left-0` : `-left-80`}`}
     >
       {/* Top */}
       <div>
         <Menu
           onClick={() => setExtended((prev) => !prev)}
           size={20}
-          className="cursor-pointer ml-2.5 dark:text-[#a2a9b0]  "
+          className="cursor-pointer ml-2.5 dark:text-[#a2a9b0] hidden md:block"
+        />
+        <X
+          onClick={handleCloseSidebar}
+          className="cursor-pointer ml-2.5 dark:text-[#a2a9b0]  md:hidden"
         />
         <div className="inline-flex bg-[#e6e4f1] items-center gap-2.5 py-3 px-3.5 mt-12 rounded-4xl text-gray-700 cursor-pointer text-sm dark:bg-[#a2a9b014] dark:hover:bg-[#a2a9b059] dark:text-[#a2a9b0]">
           <Plus size={20} />

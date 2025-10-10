@@ -18,7 +18,7 @@ function App() {
     <div
       className={`flex min-h-screen font-outfit ${isDarkMode ? `dark` : null}`}
     >
-      <Sidebar isSidebarOpen={isSidebarOpen} />
+      <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={toggleSidebar} />
       <Main toggleDarkMode={handleToggleDarkMode} sidebarOpen={toggleSidebar} />
     </div>
   );
