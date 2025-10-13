@@ -9,7 +9,13 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-function Sidebar({ isSidebarOpen, closeSidebar }) {
+function Sidebar({
+  isSidebarOpen,
+  closeSidebar,
+  recent = [],
+  onSelectRecent,
+  onNewChat,
+}) {
   const [Extended, setExtended] = useState(false);
 
   useEffect(() => {
@@ -39,17 +45,36 @@ function Sidebar({ isSidebarOpen, closeSidebar }) {
           onClick={handleCloseSidebar}
           className="cursor-pointer ml-2.5 dark:text-[#a2a9b0]  md:hidden"
         />
-        <div className="inline-flex bg-[#e6e4f1] items-center gap-2.5 py-3 px-3.5 mt-12 rounded-4xl text-gray-700 cursor-pointer text-sm dark:bg-[#a2a9b014] dark:hover:bg-[#a2a9b059] dark:text-[#a2a9b0]">
+        <button
+          onClick={() => {
+            onNewChat();
+            closeSidebar(false);
+          }}
+          className="inline-flex bg-[#e6e4f1] items-center gap-2.5 py-3 px-3.5 mt-12 rounded-4xl text-gray-700 cursor-pointer text-sm dark:bg-[#a2a9b014] dark:hover:bg-[#a2a9b059] dark:text-[#a2a9b0]"
+        >
           <Plus size={20} />
           {Extended ? <p>New Chat</p> : null}
-        </div>
+        </button>
         {Extended ? (
           <div className="flex flex-col">
             <p className="mt-7 mb-5 dark:text-[#a2a9b0]">Recent</p>
-            <div className="flex self-start gap-2.5 pr-10 py-2.5 px-4 rounded-4xl text-[#282828] cursor-pointer hover:bg-[#e2e6eb] dark:text-[#a2a9b0] dark:hover:bg-[#a2a9b014]">
-              <MessageSquare size={20} />
-              <p>What is react...</p>
-            </div>
+            {recent.length === 0 ? (
+              <div>Belum Ada Riwayat</div>
+            ) : (
+              recent.map((item, idx) => (
+                <button
+                  key={`${item}-${idx}`}
+                  onClick={() => {
+                    onSelectRecent?.(item);
+                    closeSidebar(false);
+                  }}
+                  className="flex self-start gap-2.5 pr-10 py-2.5 px-4 rounded-4xl text-[#282828] cursor-pointer hover:bg-[#e2e6eb] dark:text-[#a2a9b0] dark:hover:bg-[#a2a9b014]"
+                >
+                  <MessageSquare size={20} />
+                  <p className="truncate w-32 text-left">{item}</p>
+                </button>
+              ))
+            )}
           </div>
         ) : null}
       </div>

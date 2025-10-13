@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import User from "../assets/sundar_pichai_google_ceo-1.jfif";
 import IconGemini from "../assets/gemini.png";
 import {
@@ -14,7 +14,14 @@ import {
 import CardMain from "./CardMain";
 import { getGeminiResponse } from "../config/apiConfig";
 
-function Main({ toggleDarkMode, sidebarOpen }) {
+function Main({
+  toggleDarkMode,
+  sidebarOpen,
+  onAddRecent,
+  triggerPrompt,
+  onPromptConsumed,
+  newChatSignal,
+}) {
   const [responseText, setResponseText] = useState("");
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,16 +29,47 @@ function Main({ toggleDarkMode, sidebarOpen }) {
   const [isSubmited, setIsSubmited] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const inputRef = useRef(null);
 
-  const handleSubmit = async () => {
+  const runPrompt = async (prompt) => {
+    const p = (prompt ?? "").trim();
+    if (!p || loading) return;
+
     setIsSubmited(true);
     setLoading(true);
-    setSubmittedPrompt(inputText);
-    const response = await getGeminiResponse(inputText);
-    setResponseText(response);
-    setInputText("");
-    setLoading(false);
+    setSubmittedPrompt(p);
+    onAddRecent?.(p);
+
+    try {
+      const response = await getGeminiResponse(p);
+      setResponseText(response);
+    } catch (error) {
+      setResponseText(`Error: ${e.message}`);
+    } finally {
+      setInputText("");
+      setLoading(false);
+    }
   };
+
+  const handleSubmit = async () => {
+    await runPrompt(inputText);
+  };
+
+  useEffect(() => {
+    if (triggerPrompt) {
+      runPrompt(triggerPrompt);
+      onPromptConsumed?.();
+    }
+  }, [triggerPrompt]);
+
+  useEffect(() => {
+    setResponseText("");
+    setSubmittedPrompt("");
+    setInputText("");
+    setIsSubmited(false);
+    setLoading(false);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  }, [newChatSignal]);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && inputText.trim() !== "") {
@@ -179,6 +217,7 @@ function Main({ toggleDarkMode, sidebarOpen }) {
               name=""
               id=""
               value={inputText}
+              ref={inputRef}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="Enter a prompt here"
