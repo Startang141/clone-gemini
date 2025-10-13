@@ -104,7 +104,7 @@ function Main({ toggleDarkMode, sidebarOpen }) {
 
         {/* List Card */}
         {!isSubmited ? (
-          <div className="grid gap-4 grid-cols-4 p-5">
+          <div className="gap-4 grid-cols-4 p-5 hidden md:grid">
             <CardMain
               textCard="Suggest beautiful places to see on an upcoming road trip"
               iconCard={
